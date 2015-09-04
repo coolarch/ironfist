@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="pmd_test" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+	<description>CoolArch PMD rules</description>
+	
+    <rule name="DisallowedGauvaPreconditionsCheckNotNullJavaRule" message="Guava Preconditions#checkNotNull prohibited" class="cool.arch.ironfist.pmd.DisallowedGauvaPreconditionsCheckNotNullJavaRule">
+      <description>Use java.util.Objects#requireNotNull instead of Guava Preconditions#checkNotNull</description>
+        <priority>1</priority>
+
+      <example>
+      	TBD
+      </example>
+    </rule>
+	
+	
+</ruleset>
