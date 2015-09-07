@@ -27,19 +27,17 @@ import static java.util.Objects.requireNonNull;
  * @formatter:on
  */
 
-import java.util.Objects;
+import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TestDto {
-
-	private String foo;
+public class TestViolationClass {
 
 	/**
 	 * @param foo the foo to set
 	 */
-	public final void setFoo(String fooz) {
-		java.util.Objects.requireNonNull(foo, "foo shall not be null");
-		Objects.requireNonNull(foo, "foo shall not be null");
-		requireNonNull(foo, "foo shall not be null");
+	public final void setFoo(String foo) {
+		com.google.common.base.Preconditions.checkNotNull(foo, "foo shall not be null");
+		Preconditions.checkNotNull(foo, "foo shall not be null");
+		checkNotNull(foo, "foo shall not be null");
 	}
-
 }

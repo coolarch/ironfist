@@ -16,7 +16,15 @@
 			<artifactId>ironfist-pmd</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+	<properties>
+		<skipITs>false</skipITs>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -38,6 +46,7 @@
 					</rulesets>
 					<skipPmdError>true</skipPmdError>
 					<includeTests>true</includeTests>
+					<failOnViolation>false</failOnViolation>
 				</configuration>
 				<dependencies>
 					<dependency>

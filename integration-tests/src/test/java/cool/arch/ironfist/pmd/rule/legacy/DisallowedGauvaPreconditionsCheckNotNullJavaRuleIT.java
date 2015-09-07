@@ -1,11 +1,8 @@
-/**
- * 
- */
-package cool.arch.ironfist.pmd;
+package cool.arch.ironfist.pmd.rule.legacy;
 
 /*
  * @formatter:off
- * cool.arch.ironfist:ironfist-pmd
+ * cool.arch.ironfist:ironfist-integration-tests
  * %%
  * Copyright (C) 2015 CoolArch
  * %%
@@ -30,16 +27,9 @@ package cool.arch.ironfist.pmd;
 
 import org.junit.Test;
 
-/**
- * 
- */
-public class DisallowedMethodJavaRuleTest {
+public class DisallowedGauvaPreconditionsCheckNotNullJavaRuleIT {
 
-	/**
-	 * Test method for {@link cool.arch.ironfist.pmd.DisallowedGauvaPreconditionsCheckNotNullJavaRule#visit(net.sourceforge.pmd.lang.java.ast.ASTType, java.lang.Object)}.
-	 */
 	@Test
-	public void testVisit() throws Exception {
+	public void testExpectedViolations() {
 	}
-
 }
