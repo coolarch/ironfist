@@ -1,13 +1,5 @@
 package cool.arch.ironfist.pmd.rule.legacy;
 
-import com.google.common.base.Preconditions;
-
-import cool.arch.ironfist.pmd.util.ClassMetadataAdapter;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
-
 /*
  * @formatter:off
  * cool.arch.ironfist:ironfist-pmd
@@ -35,24 +27,33 @@ import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
 
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
+import net.sourceforge.pmd.lang.ast.AbstractNode;
+import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTName;
+import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
+
 /**
  * 
  */
 public class DisallowedGauvaPreconditionsCheckNotNullJavaRule extends AbstractJavaRule {
 
-	private static final ClassMetadataAdapter<Preconditions> ADAPTER = ClassMetadataAdapter.of(Preconditions.class);
-
 	private static final String METHOD = "checkNotNull";
 
-	private static final String FULL_STATIC_IMPORT = ADAPTER.asStaticImportName(METHOD);
+	private static final String FULL_NAME = "com.google.common.base.Preconditions";
 
-	private static final String CLASS_AND_METHOD = ADAPTER.asImportedInvocationName(METHOD);
+	private static final String FULL_STATIC_IMPORT = "com.google.common.base.Preconditions.checkNotNull";
+
+	private static final String CLASS_AND_METHOD = "Preconditions.checkNotNull";
 
 	private static final String FULL_STATIC_IMPORT_NAME_VIOLATION_MSG =
 		"Use of static import of com.google.common.base.Preconditions.checkNotNull not allowed, please use requireNotNull instead with java.util.Objects.requireNotNull properly statically imported.";
 
-	private static final String CLASS_IMPORT_NAME_VIOLATION_MSG =
-		"Use of Preconditions.checkNotNull not allowed, please use Objects.requireNotNull instead with java.util.Objects properly imported instead.";
+	private static final String CLASS_IMPORT_NAME_VIOLATION_MSG = "Use of Preconditions.checkNotNull not allowed, please use Objects.requireNotNull with java.util.Objects properly imported instead.";
 
 	private static final String METHOD_NAME_VIOLATION_MSG =
 		"Use of fully qualified com.google.common.base.Preconditions.checkNotNull not allowed, please use java.util.Objects.requireNotNull instead.";
@@ -61,14 +62,32 @@ public class DisallowedGauvaPreconditionsCheckNotNullJavaRule extends AbstractJa
 
 	private boolean staticImportFound = false;
 
+	private final Map<String, BiConsumer<ASTName, Object>> handlers = new HashMap<>();
+
+	public DisallowedGauvaPreconditionsCheckNotNullJavaRule() {
+		handlers.put(METHOD, (name, data) -> {
+			if (staticImportFound) {
+				addViolationWithMessage(data, name, METHOD_NAME_VIOLATION_MSG);
+			}
+		});
+		;
+
+		handlers.put(CLASS_AND_METHOD, (name, data) -> {
+			if (classImportFound) {
+				addViolationWithMessage(data, name, CLASS_IMPORT_NAME_VIOLATION_MSG);
+			}
+		});
+
+		handlers.put(FULL_STATIC_IMPORT, (name, data) -> addViolationWithMessage(data, name, FULL_STATIC_IMPORT_NAME_VIOLATION_MSG));
+	}
+
 	@Override
 	public Object visit(final ASTImportDeclaration importDeclaration, final Object data) {
 		if (importDeclaration.isStatic() && FULL_STATIC_IMPORT.equals(importDeclaration.getImportedName())) {
 			staticImportFound = true;
 		}
 
-		if (ADAPTER.getLongName()
-			.equals(importDeclaration.getImportedName())) {
+		if (FULL_NAME.equals(importDeclaration.getImportedName())) {
 			classImportFound = true;
 		}
 
@@ -77,21 +96,12 @@ public class DisallowedGauvaPreconditionsCheckNotNullJavaRule extends AbstractJa
 
 	@Override
 	public Object visit(final ASTName name, final Object data) {
-		final Node parent = name.jjtGetParent();
-
-		if (!(parent instanceof ASTPackageDeclaration) && !(parent instanceof ASTImportDeclaration)) {
-			if (METHOD.equals(name.getImage()) && staticImportFound) {
-				addViolationWithMessage(data, name, METHOD_NAME_VIOLATION_MSG);
-			}
-
-			if (CLASS_AND_METHOD.equals(name.getImage()) && classImportFound) {
-				addViolationWithMessage(data, name, CLASS_IMPORT_NAME_VIOLATION_MSG);
-			}
-
-			if (FULL_STATIC_IMPORT.equals(name.getImage())) {
-				addViolationWithMessage(data, name, FULL_STATIC_IMPORT_NAME_VIOLATION_MSG);
-			}
-		}
+		Optional.ofNullable(name)
+			.filter(n -> !(n.jjtGetParent() instanceof ASTPackageDeclaration))
+			.filter(n -> !(n.jjtGetParent() instanceof ASTImportDeclaration))
+			.map(AbstractNode::getImage)
+			.map(handlers::get)
+			.ifPresent(c -> c.accept(name, data));
 
 		return super.visit(name, data);
 	}
