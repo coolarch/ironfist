@@ -11,19 +11,28 @@
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Extra checks for PMD static code analysis tool</description>
 	<dependencies>
+
 		<dependency>
 			<groupId>net.sourceforge.pmd</groupId>
 			<artifactId>pmd-java</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jazzy</groupId>
+			<artifactId>jazzy-core</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 </project>

@@ -1,7 +1,5 @@
 package cool.arch.ironfist.pmd;
 
-import static java.util.Objects.requireNonNull;
-
 /*
  * @formatter:off
  * cool.arch.ironfist:ironfist-integration-tests
@@ -39,5 +37,9 @@ public class TestViolationClass {
 		com.google.common.base.Preconditions.checkNotNull(foo, "foo shall not be null");
 		Preconditions.checkNotNull(foo, "foo shall not be null");
 		checkNotNull(foo, "foo shall not be null");
+	}
+
+	public final void bblah() {
+
 	}
 }

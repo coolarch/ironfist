@@ -14,7 +14,8 @@
 	<description>Extra checks for popular code quality analysis tools</description>
 	<url>http://www.arch.cool/ironfist/</url>
 	<properties>
-		<lib.pmd.version>5.3.3</lib.pmd.version>
+		<lib.pmd.version>5.4.1</lib.pmd.version>
+		<lib.jazzy.version>0.5.2</lib.jazzy.version>
 		<github.global.server>github</github.global.server>
 	</properties>
 	<scm>
@@ -69,11 +70,54 @@
 	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
+
 			<dependency>
 				<groupId>net.sourceforge.pmd</groupId>
 				<artifactId>pmd-java</artifactId>
 				<version>${lib.pmd.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>net.sf.jazzy</groupId>
+				<artifactId>jazzy-core</artifactId>
+				<version>${lib.jazzy.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>
+											jacoco-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.7.4.201502262128,)
+										</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
