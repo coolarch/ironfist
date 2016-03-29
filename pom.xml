@@ -16,6 +16,9 @@
 	<properties>
 		<lib.pmd.version>5.4.1</lib.pmd.version>
 		<lib.jazzy.version>0.5.2</lib.jazzy.version>
+		<lib.enforcer-api.version>1.2</lib.enforcer-api.version>
+		<lib.asm.version>4.1</lib.asm.version>
+		<lib.plexus-container-default.version>1.0-alpha-9</lib.plexus-container-default.version>
 		<github.global.server>github</github.global.server>
 	</properties>
 	<scm>
@@ -56,6 +59,7 @@
 	</ciManagement>
 	<modules>
 		<module>pmd</module>
+		<module>enforcer</module>
 		<module>integration-tests</module>
 	</modules>
 	<distributionManagement>
@@ -81,6 +85,24 @@
 				<groupId>net.sf.jazzy</groupId>
 				<artifactId>jazzy-core</artifactId>
 				<version>${lib.jazzy.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven.enforcer</groupId>
+				<artifactId>enforcer-api</artifactId>
+				<version>${lib.enforcer-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${lib.asm.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-container-default</artifactId>
+				<version>${lib.plexus-container-default.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -110,7 +132,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
